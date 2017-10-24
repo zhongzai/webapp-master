@@ -63,39 +63,6 @@
         });
 
        }
-//        this.$api.login(this, this.username, this.password,
-//          (ret) => {
-//            console.log(ret);
-//            if (ret.status != 0) {
-//              Toast(ret.message);
-//            }
-//            else {
-//              var user = ret.data;
-//              if (user.role != "cs") {
-//                Toast("目前仅支持客服用户");
-//              }
-//              else {
-//                this.$sessionstore.set('user', JSON.stringify(user));
-//                this.$localstore.set('username', this.username);
-//                if (this.keeppass == true) {
-//                  this.$localstore.set('pass', this.password);
-//                  this.$localstore.set('keeppass', true);
-//                }
-//                else {
-//                  this.$localstore.set('pass', "");
-//                  this.$localstore.remove('keeppass');
-//                }
-//
-//                this.$router.push('/kf');
-//              }
-//
-//            }
-//          }
-//          ,
-//          (err) => {
-//            Toast(err);
-//          })
-//      }
     }
   }
 </script>

@@ -17,23 +17,25 @@
     <mt-tab-container v-model="selected" class="tabcon">
       <mt-tab-container-item class="tabcon_item" id="1">
           <div class="con1">
-            <div class="weekdayCon" >
-              <div v-for="n in 5" class="weekday">
-                <div>今天</div>
-                <div>10-12</div>
-                <div>预约</div>
-              </div>
+              <div class="weekdayCon" >
+                <div v-for="schedule in schedulings" class="weekday" @click="selectSort(schedule)">
+                  <div>{{ schedule.weekString }}</div>
+                  <div>{{ schedule.scheduleTranferDate }}</div>
+                  <div v-if="number=0">约满</div>
+                  <div v-else>预约</div>
+
+
+                </div>
+                <div class="actionCon" v-for="sc in sched">
+                  <div class="actionConDiv">
+                    <div class="actionConDivLable">{{sc.timePeriod}}：{{sc.number}}</div>
+                    <mt-button class="actionConBtn" type="primary" size="normal" @click="login()">预约挂号</mt-button>
+
+                  </div>
+                </div>
+
             </div>
-            <div class="actionCon">
-              <div class="actionConDiv">
-                <div class="actionConDivLable">上午：剩余33</div>
-                <mt-button class="actionConBtn" type="primary" size="normal" @click="login()">预约挂号</mt-button>
-                <div class="actionConDivLable">下午：剩余33</div>
-                <mt-button class="actionConBtn" type="primary" size="normal" @click="login()">预约挂号</mt-button>
-                <div class="actionConDivLable">晚上：剩余0</div>
-                <mt-button class="actionConBtn" style="background-color: #9c9c9c" type="primary" size="normal" @click="login()">预约挂号</mt-button>
-              </div>
-            </div>
+
           </div>
 
       </mt-tab-container-item>
@@ -54,9 +56,30 @@
     export default {
       data () {
         return {
-          selected:''
+          selected:"1",
+          schedulings:this.schedulings,
+          sched:this.sched
         }
+
       },
+      created (){
+        var me = this;
+        me.$api.schedulingList(me,(ret) => {
+          if (ret.code != 200) {
+            Toast(ret.msg);
+          }else{
+            me.schedulings = ret.result;
+          }
+        }, (e) => {
+          Toast("获取列表失败！:" + e);
+        });
+      },
+
+      methods: {
+        selectSort (schedule) {
+          this.sched=schedule.scheduling;
+        }
+      }
     }
 </script>
 
@@ -82,7 +105,6 @@
     padding: 5px 0;
   }
   .actionCon{
-    position: absolute;
     top: 90px;
     bottom: 10px;
     width: 100%;

@@ -73,4 +73,14 @@ export default {
             })
     },
 
+  schedulingList:function(ctx,ok,err)
+    {
+      ajax.post('/service/scheduling/findAllRecords')
+        .then((resp,a,b) => {
+          this.doResp(ctx,resp.data,ok); ;
+        }).catch((e) => {
+        err(e)
+      })
+    },
+
 }
