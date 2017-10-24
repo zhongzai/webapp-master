@@ -23,13 +23,13 @@ module.exports = {
   },
   dev: {
     env: require('./dev.env'),
-    port: 8080,
+    port: 8888,
     autoOpenBrowser: false,
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
         '/service': {
-        target: 'http://192.168.50.242:9980/imagecloud',
+        target: 'http://192.168.7.30:8080',
         changeOrigin: true ,
 
         onProxyReq:function(proxyReq, req, res)

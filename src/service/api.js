@@ -61,11 +61,9 @@ export default {
     },
 
      login: function(ctx,account, pass, ok, err) {
-        ajax.post('/service/user/weblogin', {}, {
-                params: {
-                    'username': account,
+        ajax.post('/service/user/login', {
+                    'userName': account,
                     'password': pass
-                }
             })
             .then((resp,a,b) => {
                 this.doResp(ctx,resp.data,ok); ;
