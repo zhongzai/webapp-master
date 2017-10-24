@@ -1,10 +1,10 @@
 <template>
- 
+
   <div style="height: 100%">
      <!-- <mt-header :title="total" :fixed="false" class="appheader">
      <mt-button  @click="logout" slot="right"><i class="icon sign out"></i>退出</mt-button>
 </mt-header>  -->
- 
+
 <div class="page-desc">共<span style="color:#ed3f14">{{allCount}}</span>个待分配，下拉刷新,上拉加载</div>
   <mt-spinner  type="double-bounce" :size="32" color="#26a2ff" v-show="loading"></mt-spinner>
 
@@ -18,35 +18,35 @@
         <table style="width: 100%">
 
           <tr>
-           <td  class="title">{{getInstitution(item.data.ask.askSite)}}</td>   
+           <td  class="title">{{getInstitution(item.data.ask.askSite)}}</td>
             <td class="operation" rowspan="3" valign="middle" @click="dispatch(item)">
               <span ><i class="icon chevron right"></i></span>
-            </td>                     
+            </td>
           </tr>
           <tr >
           <td class="desc">
-            姓名:{{item.data.image.patientname}}            
-            </td>         
-            
+            姓名:{{item.data.image.patientname}}
+            </td>
+
 
           </tr>
           <tr>
             <td class="desc">
-              咨询时间:{{item.data.ask.asktime}}  
+              咨询时间:{{item.data.ask.asktime}}
             </td>
           </tr>
         </table>
-          
-              
+
+
         </div>
       </div>
-       
+
 </mt-loadmore>
 </div>
 <mt-popup v-model="popupshow" position="right" class="popup">
 
 <div class="page-loadmore-wrapper"  :style="{ height: wrapperHeight +50 + 'px' }">
-<div v-for='item in doctors' class="page-listitem">  
+<div v-for='item in doctors' class="page-listitem">
   <table style="width:100%">
     <tr>
       <td rowspan="3" width="50">
@@ -72,7 +72,7 @@
   </table>
  </div>
  </div>
-  
+
     </mt-popup>
 </div>
 </template>
@@ -82,10 +82,10 @@
 import {Toast} from 'mint-ui';
 import { MessageBox } from 'mint-ui';
 export default {
-  
+
   data () {
-    return {      
-      askSelect:{},            
+    return {
+      askSelect:{},
       slots:[{values:[]}],
       doctors:[],
       total:0,
@@ -93,7 +93,7 @@ export default {
       sites:[],
       pageNum:1,
       pageSize:10,
-      allLoaded:false,      
+      allLoaded:false,
       data:[],
       wrapperHeight: 0,
       popupshow:false,
@@ -101,12 +101,12 @@ export default {
     }
   },
   mounted (){
-    
-    this.wrapperHeight = document.body.clientHeight - 100;    
-    
-      
+
+    this.wrapperHeight = document.body.clientHeight - 100;
+
+
   },
-  beforeRouteLeave (to, from, next) {    
+  beforeRouteLeave (to, from, next) {
 
     if (this.popupshow) {
       this.closePopup();
@@ -118,35 +118,35 @@ export default {
     }
   },
 beforeRouteEnter (to, from, next) {
-  
-  
+
+
   next(vm => {
-    // 通过 `vm` 访问组件实例        
+    // 通过 `vm` 访问组件实例
     vm.$setTitle(to.meta.title);
     vm.getDoctors();
     vm.getSites();
-    vm.refresh();  
+    vm.refresh();
 
-    
+
 
   })
 },
-  
-  
+
+
   methods:{
     getInstitution(siteid)
-    {            
+    {
       for (var i = this.sites.length - 1; i >= 0; i--) {
         if (this.sites[i].id == siteid) {
-          return this.sites[i].name;  
-        }              
+          return this.sites[i].name;
+        }
       }
     },
     getSites(){
                 var me = this;
                 var params={pageSize:300,pageNum:1};
                 me.$api.getSites(this,params, (ret) => {
-                    
+
                     if (ret.status != 0) {
                         Toast(ret.message);
                     } else {
@@ -159,11 +159,11 @@ beforeRouteEnter (to, from, next) {
             },
     submitDispatch(docSelected)
     {
-        MessageBox.confirm('确定分配给 '+docSelected.name+'?').then(action => {          
-        var me = this;     
-        
+        MessageBox.confirm('确定分配给 '+docSelected.name+'?').then(action => {
+        var me = this;
+
         if (!docSelected.id || !me.askSelect.id) {
-          Toast("数据异常，请刷新");            
+          Toast("数据异常，请刷新");
           return;
         }
         else
@@ -171,34 +171,34 @@ beforeRouteEnter (to, from, next) {
 
           var params={askid:me.askSelect.id,doctorid:docSelected.id};
           this.$api.dispatchAsk(this,params,(ret)=>{
-          if (ret.status==0) {  
+          if (ret.status==0) {
             Toast("分配成功")    ;
-            me.closePopup();      
-            me.refresh(); 
+            me.closePopup();
+            me.refresh();
           }
           else
           {
             Toast(ret.message);
           }
-          
+
         },(e)=>{
           Toast("分配失败:"+e);
         })
       }
 
     }).catch((e)=>{
-                  
+
     })
-      
-        
+
+
     },
-    
+
     closePopup()
-    {      
+    {
       this.$setTitle(this.$route.meta.title);
       this.askSelect = {};
-      this.popupshow = false;      
-      
+      this.popupshow = false;
+
     },
     getDoctors()
     {
@@ -206,19 +206,19 @@ beforeRouteEnter (to, from, next) {
        var me = this;
                 var params={pageSize:300,pageNum:1,blocked:0,rolename:'doctor'};
                 me.$api.getUsers(me,params, (ret) => {
-                    
+
                     if (ret.status != 0) {
                         Toast(ret.message);
-                    } else {                        
+                    } else {
                         me.doctors = ret.list;
                     }
 
                 }, (e) => {
                     Toast("获取医生列表出错:" + e);
                 });
-    
+
     },
-   dispatch(item){      
+   dispatch(item){
       this.$setTitle(item.data.image.patientname);
       this.askSelect = item.data.ask;
       this.popupshow = true;
@@ -231,88 +231,88 @@ beforeRouteEnter (to, from, next) {
 
     loadMore(){
       var me= this;
-          
+
       me.pageNum+=1;
       me.getData(()=>{
-        this.$refs.loadmore.onBottomLoaded();   
-        document.body.scrollTop=0; 
-        this.$nextTick(function(){          
-          this.wrapperHeight = document.body.clientHeight - 100;  
+        this.$refs.loadmore.onBottomLoaded();
+        document.body.scrollTop=0;
+        this.$nextTick(function(){
+          this.wrapperHeight = document.body.clientHeight - 100;
         });
-        
+
       });
 
     },
     refresh()
     {
-      
+
       var me= this;
       me.data=[];
       me.pageNum=1;
       me.total = 0;
-      me.allLoaded=false; 
+      me.allLoaded=false;
       me.getData(()=>{
-        this.$refs.loadmore.onTopLoaded();   
-        document.body.scrollTop=0; 
-        this.$nextTick(function(){          
-          this.wrapperHeight = document.body.clientHeight - 100;  
+        this.$refs.loadmore.onTopLoaded();
+        document.body.scrollTop=0;
+        this.$nextTick(function(){
+          this.wrapperHeight = document.body.clientHeight - 100;
         });
-        
+
       });
 
 
     },
-    
+
     getData: function(cb)
     {
-      
+
       var me=this;
       var user = this.$user;
       var data={pageSize:me.pageSize,pageNum:me.pageNum,
          rolename:me.$user.role,status:0,asktimedesc:true};
-      
+
       me.loading = true;
-      me.$api.askList(this, data, (ret)=> {   
-                      
-          if (ret.status==0) {     
+      me.$api.askList(this, data, (ret)=> {
+
+          if (ret.status==0) {
 
             this.allCount = ret.totalRow;
             this.data = this.data.concat(ret.data);
             me.total += ret.data.length;
             if (me.total>=ret.totalRow) {
-              me.allLoaded=true; 
-            }            
-            
+              me.allLoaded=true;
+            }
+
           }
-          
+
           else
           {
             Toast(ret.message);
           }
-          
-          
-          cb();     
-          me.loading = false;     
+
+
+          cb();
+          me.loading = false;
       },
       (err)=>{
         Toast(err);
         me.loading = false;
       }
      );
-    
+
 
     }
   }
 }
 </script>
 
- <style scoped>
+<style scoped>
 
 .doctor{
-  
+
     border-bottom: solid 1px #eee;
     margin: 5px auto;
-    text-align: left;   
+    text-align: left;
 
 }
 .doctor div{
@@ -322,32 +322,32 @@ beforeRouteEnter (to, from, next) {
 }
 
 .page-desc {
-    text-align: center;    
+    text-align: center;
     padding-bottom: 5px;
-    border-bottom: solid 1px #000;   
+    border-bottom: solid 1px #000;
     background-color: #f8f8f9;
 }
-.page-listitem {      
+.page-listitem {
     border-bottom: solid 1px #ddd;
     margin: 5px auto;
-    text-align: left;   
-    
+    text-align: left;
+
 
 }
-.page-listitem .title{    
+.page-listitem .title{
     font-size: 14px;
     color: #1c2438;
-    font-weight:bold;    
+    font-weight:bold;
 }
-.page-listitem .desc{    
+.page-listitem .desc{
     font-size: 14;
     color: #495060;
-    
-    
+
+
 }
-.page-listitem .operation{        
+.page-listitem .operation{
     text-align: right;
-    padding-right: 15px;  
+    padding-right: 15px;
     color: #555;
 }
 .popup

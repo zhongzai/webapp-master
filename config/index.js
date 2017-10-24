@@ -31,13 +31,13 @@ module.exports = {
         '/service': {
         target: 'http://192.168.50.242:9980/imagecloud',
         changeOrigin: true ,
-       
+
         onProxyReq:function(proxyReq, req, res)
         {
           proxyReq.setHeader('cookie','JSESSIONID=umNTcWgYuDtNGXKEoMdpGmU-Gh62Nqi6hDemJbYG.cpbserver; __utma=20440440.915524282.1503897740.1504226831.1504226831.7; __utmc=20440440; __utmz=20440440.1503897740.1.1.utmcsr=(direct)|utmccn=(direct)|utmcmd=(none)');
         }
-      
-      
+
+
     }},
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README

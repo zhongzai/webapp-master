@@ -46,59 +46,60 @@ Vue.i18n.set('cn');
 
 Vue.config.productionTip = false
 
-router.beforeEach((to, from, next) => {    
-    try {
-    	  	    
-    	var user={};
+router.beforeEach((to, from, next) => {
+  try {
 
-	    if (to.path != "/" ) {
-        
-        var str = Vue.prototype.$sessionstore.get('user');
-        if (!str) {
-            throw 'please login first';
-        }
-         user = JSON.parse(str);
-	    	  if ((!user || !user.role)) {
-            throw 'please login first';
-          }
-          Vue.prototype.$user = user;
-          next();	    	
-	      }
-	      else
-	      {
-	      	Vue.prototype.$user = user;
-	      	next();
-	      }
+    var user = {};
+
+    if (to.path != "/") {
+
+      var str = Vue.prototype.$sessionstore.get('user');
+      console.log(str)
+      if (!str) {
+        throw 'please login first';
+      }
+      user = JSON.parse(str);
+      // if ((!user || !user.role)) {
+      if ((!user)) {
+        throw 'please login first';
+      }
+      Vue.prototype.$user = user;
+      next();
+    }
+    else {
+      Vue.prototype.$user = user;
+      next();
+    }
   } catch (e) {
-  		console.log(e);
-      next({path: '/',replace: true,query: {code: -1}});
+    console.log(e);
+    next({path: '/', replace: true, query: {code: -1}});
   }
 
 });
 
 
 function SetTitle(title) {
-    document.title = title;
-    var mobile = navigator.userAgent.toLowerCase();
-    if (/iphone|ipad|ipod/.test(mobile)) {
-        var iframe = document.createElement('iframe');
-        iframe.style.visibility = 'hidden';
-        iframe.setAttribute('src', 'favicon.ico');
-        var iframeCallback = function() {
-            setTimeout(function() {
-                iframe.removeEventListener('load', iframeCallback);
-                document.body.removeChild(iframe);
-            }, 0);
-        };
-        iframe.addEventListener('load', iframeCallback);
-        document.body.appendChild(iframe);
-    }
+  document.title = title;
+  var mobile = navigator.userAgent.toLowerCase();
+  if (/iphone|ipad|ipod/.test(mobile)) {
+    var iframe = document.createElement('iframe');
+    iframe.style.visibility = 'hidden';
+    iframe.setAttribute('src', 'favicon.ico');
+    var iframeCallback = function () {
+      setTimeout(function () {
+        iframe.removeEventListener('load', iframeCallback);
+        document.body.removeChild(iframe);
+      }, 0);
+    };
+    iframe.addEventListener('load', iframeCallback);
+    document.body.appendChild(iframe);
+  }
 }
-Vue.prototype.$setTitle=SetTitle;
+Vue.prototype.$setTitle = SetTitle;
 //Vue.use(MintUI)
 /* eslint-disable no-new */
 
-const app = new Vue({  
-  router,  
-  render:h=>h(App)  
+const app = new Vue({
+  router,
+  render: h => h(App)
 }).$mount('#app');
