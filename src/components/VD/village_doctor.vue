@@ -21,7 +21,7 @@
                 <div v-for="schedule in schedulings" class="weekday" @click="selectSort(schedule)">
                   <div>{{ schedule.weekString }}</div>
                   <div>{{ schedule.scheduleTranferDate }}</div>
-                  <div v-if="number=0">约满</div>
+                  <div v-if="schedule.totalNumber=0">约满</div>
                   <div v-else>预约</div>
 
 
@@ -29,7 +29,9 @@
                 <div class="actionCon" v-for="sc in sched">
                   <div class="actionConDiv">
                     <div class="actionConDivLable">{{sc.timePeriod}}：{{sc.number}}</div>
-                    <mt-button class="actionConBtn" type="primary" size="normal" @click="login()">预约挂号</mt-button>
+
+                    <mt-button class="actionConBtn" type="primary" size="normal" @click="appointment()">预约挂号</mt-button>
+
 
                   </div>
                 </div>
@@ -53,6 +55,7 @@
 <script>
   import { Header } from 'mint-ui';
   import { Navbar, TabItem } from 'mint-ui';
+  import { Popup } from 'mint-ui';
     export default {
       data () {
         return {
@@ -78,6 +81,14 @@
       methods: {
         selectSort (schedule) {
           this.sched=schedule.scheduling;
+          this.$localstore.set('scheduleId', this.sched[0].scheduleId);
+          this.$localstore.set('scheduleDate', this.sched[0].scheduleDate);
+
+        },
+        appointment () {
+          var me = this;
+          this.$router.push('/booking');
+          this.$localstore.set('timePeriod', this.sched[0].timePeriod);
         }
       }
     }

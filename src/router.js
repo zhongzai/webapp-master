@@ -16,6 +16,10 @@ var router =  new Router({
       }]
     },
     {
+      path: '/booking',
+      component: (resolve) => require(['./components/VD/booking.vue'], resolve)  ,
+    },
+    {
       path: '/vd',
       component: (resolve) => require(['./components/VD/village_doctor.vue'], resolve)  ,
       children: [
@@ -42,7 +46,11 @@ var router =  new Router({
       name:'404',
       meta: {title:'错误'},
       component:(resolve) => require(['./components/404.vue'], resolve)
-    }
+    },
+
+
+
+
   ]
 });
 

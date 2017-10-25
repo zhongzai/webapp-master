@@ -51,6 +51,7 @@
             if (user.userType == 1) {       // 村医
               this.$sessionstore.set('user', JSON.stringify(user));
               this.$localstore.set('username', this.username);
+              this.$localstore.set('userId', user.userId);
 
               console.log(this.username);
               this.$router.push('/vd/1');
