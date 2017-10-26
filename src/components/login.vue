@@ -6,8 +6,14 @@
       <label>账号：</label>
       <mt-field class="inputStr" placeholder="请输入用户名" type="text" v-model="username"></mt-field>
       <label>密码：</label>
-      <mt-field class="inputStr" placeholder="请输入密码" type="password" v-model="password" ></mt-field>
-
+      <mt-field class="inputStr" placeholder="请输入密码" type="password" v-model="password"></mt-field>
+      <!--<mt-field label="用户名" placeholder="请输入用户名" type="text" v-model="username"></mt-field>
+      <mt-field label="密码" placeholder="请输入密码" type="password" v-model="password"></mt-field>
+      <div class="mint-cell-wrapper">-->
+        <!--<span class="mint-cell-text" style="margin: 10px 10px">记住密码&nbsp;&nbsp;</span>-->
+        <!--<mt-switch v-model="keeppass" style="margin: 10px 10px">-->
+        <!--</mt-switch>-->
+      <!--</div>-->
     </div>
     <div class="loginDiv" style="">
       <mt-button class="loginBtn" type="primary" size="normal" @click="login()">登录</mt-button>
@@ -35,35 +41,34 @@
     data(){
       return {
         username: this.$localstore.get('username') || '',
-        password: this.$localstore.get('password') || '',
+        password: this.$localstore.get('pass') || '',
         keeppass: false
       }
     },
     methods: {
       login(){
-        var me = this;
-        me.$api.login(me,me.username,me.password,(ret) => {
-
-          if (ret.code != 200) {
-            Toast(ret.msg);
-          }else{
-            var user = ret.result;
-            if (user.userType == 1) {       // 村医
-              this.$sessionstore.set('user', JSON.stringify(user));
-              this.$localstore.set('username', this.username);
-              this.$localstore.set('userId', user.userId);
-
-              console.log(this.username);
-              this.$router.push('/vd/1');
-            }else if(user.userType == 0){   // 导医
-              Toast("目前仅支持村医");
-            }
-          }
-        }, (e) => {
-          Toast("登录失败:" + e);
-        });
-
-       }
+          var that = this;
+          that.$api.login(that,that.username,that.password,
+            (ret) => {
+              if (ret.code != 200) {
+                Toast(ret.msg);
+              }else{
+                console.log('ret',ret);
+                var user = ret.result;
+                if (user.userType == 1) {       // 村医
+                  this.$sessionstore.set('user', JSON.stringify(user));
+                  this.$localstore.set('username', this.username);
+  //                this.$router.push('/vd/1');
+                  this.$router.push('/vd');
+                }else if(user.userType == 0){   // 导医
+                  Toast("目前仅支持村医");
+                }
+              }
+          },
+          (e) => {
+            Toast("登录失败:" + e);
+          });
+      },
     }
   }
 </script>
