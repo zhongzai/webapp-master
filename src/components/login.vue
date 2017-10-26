@@ -57,11 +57,13 @@
                 var user = ret.result;
                 if (user.userType == 1) {       // 村医
                   this.$sessionstore.set('user', JSON.stringify(user));
-                  this.$localstore.set('username', this.username);
+                  this.$localstore.set('username', user.userName);
+                  this.$localstore.set('userId', user.userId);
   //                this.$router.push('/vd/1');
                   this.$router.push('/vd');
-                }else if(user.userType == 0){   // 导医
-                  Toast("目前仅支持村医");
+                }else if(user.userType == 2){   // 导医
+                  this.$localstore.set('userId', user.userId);
+                  this.$router.push('/vd');
                 }
               }
           },

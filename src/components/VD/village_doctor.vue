@@ -28,15 +28,15 @@
                         <div class="actionConDiv">
                             <div class="actionConDivLable"><b>上午：剩余</b>{{schedulings[daySelected].scheduling[0] && schedulings[daySelected].scheduling[0].number}}</div>
                             <mt-button class="actionConBtn" :disabled="schedulings[daySelected].scheduling[0] && schedulings[daySelected].scheduling[0].number==0"
-                                       type="primary" size="normal" @click="apply()">{{schedulings[daySelected].scheduling[0] &&schedulings[daySelected].scheduling[0].number==0?'约满':'预约挂号'}}
+                                       type="primary" size="normal" @click="apply(schedulings[daySelected].scheduling[0].scheduleId,schedulings[daySelected].scheduling[0].scheduleDate,schedulings[daySelected].scheduling[0].timePeriod)">{{schedulings[daySelected].scheduling[0] &&schedulings[daySelected].scheduling[0].number==0?'约满':'预约挂号'}}
                             </mt-button>
                             <div class="actionConDivLable"><b>下午：剩余</b>{{schedulings[daySelected].scheduling[1] && schedulings[daySelected].scheduling[1].number}}</div>
                             <mt-button class="actionConBtn" :disabled="schedulings[daySelected].scheduling[1] && schedulings[daySelected].scheduling[1].number==0"
-                                       type="primary" size="normal" @click="apply()">{{schedulings[daySelected].scheduling[1] && schedulings[daySelected].scheduling[1].number==0?'约满':'预约挂号'}}
+                                       type="primary" size="normal" @click="apply(schedulings[daySelected].scheduling[1].scheduleId,schedulings[daySelected].scheduling[1].scheduleDate,schedulings[daySelected].scheduling[1].timePeriod)">{{schedulings[daySelected].scheduling[1] && schedulings[daySelected].scheduling[1].number==0?'约满':'预约挂号'}}
                             </mt-button>
                             <div class="actionConDivLable"><b>晚上：剩余</b>{{schedulings[daySelected].scheduling[2] && schedulings[daySelected].scheduling[2].number}}</div>
                             <mt-button class="actionConBtn" :disabled="schedulings[daySelected].scheduling[2] && schedulings[daySelected].scheduling[2].number==0"  type="primary"
-                                       size="normal" @click="apply()">{{schedulings[daySelected].scheduling[2] && schedulings[daySelected].scheduling[2].number==0?'约满':'预约挂号'}}
+                                       size="normal" @click="apply(schedulings[daySelected].scheduling[2].scheduleId,schedulings[daySelected].scheduling[2].scheduleDate,schedulings[daySelected].scheduling[2].timePeriod)">{{schedulings[daySelected].scheduling[2] && schedulings[daySelected].scheduling[2].number==0?'约满':'预约挂号'}}
                             </mt-button>
                         </div>
                     </div>
@@ -48,7 +48,7 @@
                                 <label class="popupStr">患者姓名：</label>
                                 <mt-field placeholder="" type="text" v-model="appointmentRole.name"></mt-field>
                                 <label class="popupStr">年龄：</label>
-                                <mt-field placeholder="" type="password" v-model="appointmentRole.age"></mt-field>
+                                <mt-field placeholder="" type="number" v-model="appointmentRole.age"></mt-field>
                                 <label class="popupStr">性别：</label>
                                 <select v-model="selectSex" class="popup_select">
                                     <option v-for="option in options" :value="option">
@@ -56,11 +56,11 @@
                                     </option>
                                 </select>
                                 <label class="popupStr">身份证号：</label>
-                                <mt-field placeholder="" type="password" v-model=appointmentRole.identity></mt-field>
+                                <mt-field placeholder="" :attr="{ maxlength: 18 }" v-model=appointmentRole.identity></mt-field>
                                 <label class="popupStr">手机号：</label>
-                                <mt-field placeholder="" type="password" v-model="appointmentRole.phoneNumber"></mt-field>
+                                <mt-field placeholder="" type="tel" v-model="appointmentRole.phoneNumber"></mt-field>
                                 <label class="popupStr">QQ邮箱：</label>
-                                <mt-field placeholder="" type="password" v-model="appointmentRole.qqMail"></mt-field>
+                                <mt-field placeholder="" type="email" v-model="appointmentRole.qqMail"></mt-field>
                                 <mt-button class="popup_sumbitBtn" type="primary" size="normal" @click="applySumbit()">提交
                                 </mt-button>
                             </div>
@@ -78,16 +78,17 @@
                 </div>
             </mt-tab-container-item>
             <mt-tab-container-item class="tabcon_item" id="2">
-                <mt-cell v-for="n in 10"  :key="1">
+                <mt-cell v-for="(item, index) in appointments"  :key="item.appointmentId">
                     <div class="row_con">
                         <div class="left_con" style="">
-                            <span class="left_row">Aaron</span>
-                            <span class="left_row">未取号</span>
+                            <span class="left_row">{{item.realName}}</span>
+                            <span class="left_row" v-if="item.status==0">未取号</span>
+                          <span class="left_row" v-if="item.status==1">已取号</span>
                         </div>
                         <div class="right_con" style="display: inline-block">
-                            <span class="right_row">身份证：221244048888454</span>
-                            <span class="right_row">预约检查时间：10月14日 上午</span>
-                            <span class="right_row">预约码：12213123123132</span>
+                            <span class="right_row">身份证：{{item.idCard}}</span>
+                            <span class="right_row">预约检查时间：{{item.scheduleDate}} {{item.timePeriod}}</span>
+                            <span class="right_row">预约码：{{item.appointmentNumber}}</span>
                         </div>
                     </div>
                 </mt-cell>
@@ -125,6 +126,15 @@
             }, (e) => {
                 Toast("获取列表失败！:" + e);
             });
+          that.$api.appointmentList(that,that.$localstore.get('userId'), (ret) => {
+            if (ret.code != 200) {
+              Toast(ret.msg);
+            } else {
+              that.appointments = ret.result;
+            }
+          }, (e) => {
+            Toast("获取列表失败！:" + e);
+          });
         },
         data() {
             return {
@@ -148,16 +158,17 @@
                 selectSex:'男'
         }},
         methods: {
-            apply: function () {
+            apply: function (scheduleId,scheduleDate,timePeriod) {
+                this.$localstore.set('scheduleId',scheduleId);
+              this.$localstore.set('scheduleDate',scheduleDate);
+              this.$localstore.set('timePeriod',timePeriod);
                 this.isPopup = true;
             },
             applySumbit:function () {
-
-
                 var me = this;
                 let data={
                     scheduleId:this.$localstore.get('scheduleId'),
-                    userId:this.$localstore.get('userId'),
+                    createrId:this.$localstore.get('userId'),
                     idCard:this.appointmentRole.identity,
                     sex:this.appointmentRole.selectSex,
                     age:this.appointmentRole.age,

@@ -52,11 +52,6 @@
           }else{
             this.$router.push('/vd/1');
             //TODO
-
-
-
-
-
           }
         }, (e) => {
           Toast("获取列表失败！:" + e);

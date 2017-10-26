@@ -83,10 +83,20 @@ export default {
     registerBooking: function(ctx,data, ok, err) {
         ajax.post('/service/appointment/add', data)
             .then((resp,a,b) => {
-                this.doResp(ctx,resp.data,ok); ;
+                this.doResp(ctx,resp.data,ok);
             }).catch((e) => {
             console.log(e)          ;
             err(e)
         })
     },
+  appointmentList: function (ctx,createrId,ok, err) {
+    ajax.post('/service/appointment/list',{
+      'createrId': createrId
+    })
+      .then((resp, a, b) => {
+        this.doResp(ctx, resp.data, ok);
+      }).catch((e) => {
+      err(e)
+    })
+  },
 }
