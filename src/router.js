@@ -20,6 +20,10 @@ var router =  new Router({
       component: (resolve) => require(['./components/VD/village_doctor.vue'], resolve)  ,
     },
     {
+      path: '/gd',
+      component: (resolve) => require(['./components/GD/Index.vue'], resolve)  ,
+    },
+    {
       path:'/',
       meta: {title:'用户登录'},
       component:(resolve) => require(['./components/login.vue'], resolve)
