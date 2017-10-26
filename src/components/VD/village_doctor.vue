@@ -71,8 +71,8 @@
                         <div style="text-align: center">
                             <h2>预约成功！</h2>
                             <span class="popupSuc_str">患者: {{bookingname}}</span>
-                            <span class="popupSuc_str">{{bookingcode}}</span>
                             <span class="popupSuc_str">{{bookingtime}}</span>
+                            <span class="popupSuc_str">{{bookingcode}}</span>
                         </div>
                     </mt-popup>
                 </div>

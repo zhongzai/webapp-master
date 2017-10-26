@@ -61,6 +61,8 @@
                   this.$localstore.set('userId', user.userId);
                   this.$router.push('/vd');
                 }else if(user.userType == 2){   // 导医
+                  this.$sessionstore.set('user', JSON.stringify(user));
+                  this.$localstore.set('username', user.userName);
                   this.$localstore.set('userId', user.userId);
                   this.$router.push('/gd');
                 }

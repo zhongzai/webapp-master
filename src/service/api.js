@@ -12,7 +12,7 @@ export default {
     }
 
   },
-  dispatchAsk: function (ctx, data, ok, err) {
+ /* dispatchAsk: function (ctx, data, ok, err) {
     ajax.post('/service/ask/dispatch', {}, {
       params: data
     })
@@ -57,7 +57,7 @@ export default {
       }).catch((e) => {
       err(e)
     })
-  },
+  },*/
 
   login: function (ctx, account, pass, ok, err) {
     ajax.post('/service/user/login', {
@@ -92,6 +92,26 @@ export default {
   appointmentList: function (ctx,createrId,ok, err) {
     ajax.post('/service/appointment/list',{
       'createrId': createrId
+    })
+      .then((resp, a, b) => {
+        this.doResp(ctx, resp.data, ok);
+      }).catch((e) => {
+      err(e)
+    })
+  },
+  checkAppointment: function (ctx,appointmentNumber,ok, err) {
+    ajax.post('/service/appointment/checkAppointment',{
+      'appointmentNumber':appointmentNumber,
+    })
+      .then((resp, a, b) => {
+        this.doResp(ctx, resp.data, ok);
+      }).catch((e) => {
+      err(e)
+    })
+  },
+  getNumber: function (ctx,appointmentNumber,ok, err) {
+    ajax.post('/service/appointment/getNumber',{
+      'appointmentNumber':appointmentNumber,
     })
       .then((resp, a, b) => {
         this.doResp(ctx, resp.data, ok);
