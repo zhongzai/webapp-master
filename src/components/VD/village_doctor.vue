@@ -157,6 +157,13 @@
                 options:['男','女'],
                 selectSex:'男'
         }},
+      watch:{
+        isPopupSuc:function(){
+          if(this.isPopupSuc==false){
+            location.reload();
+          }
+        }
+      },
         methods: {
             apply: function (scheduleId,scheduleDate,timePeriod) {
                 this.$localstore.set('scheduleId',scheduleId);
@@ -181,7 +188,6 @@
                     if (ret.code != 200) {
                         Toast(ret.msg);
                     }else{
-                        this.$router.push('/vd');
                         this.isPopup = false;
                         this.bookingname = ret.result.name ;
                         this.bookingcode = ret.result.code;
