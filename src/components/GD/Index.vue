@@ -184,7 +184,7 @@
   .popupSuc_str{
     display: inline-block;
     padding: 5px 80px;
-    width: 100px;
+    width: 120px;
   }
   .popupFai,.popupSuc{
     width: 252px;

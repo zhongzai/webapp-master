@@ -67,12 +67,12 @@
                         </div>
                     </mt-popup>
                     <mt-popup class="popupSuc" v-model="isPopupSuc" popup-transition="popup-fade" modal="true"
-                              closeOnClickModal="true">
+                              closeOnClickModal="true" style="border-radius: 5px;">
                         <div style="text-align: center">
-                            <h2>预约成功！</h2>
+                            <h2 style="position: relative;left: 10px;">预约成功！</h2>
                             <span class="popupSuc_str">患者: {{bookingname}}</span>
                             <span class="popupSuc_str">{{bookingtime}}</span>
-                            <span class="popupSuc_str">{{bookingcode}}</span>
+                            <span class="popupSuc_str" style="position: relative;left: -4px;">{{bookingcode}}</span>
                         </div>
                     </mt-popup>
                 </div>
@@ -336,6 +336,6 @@
     .popupSuc_str{
         display: inline-block;
         padding: 5px 80px;
-        width: 100px;
+        width: 120px;
     }
 </style>
