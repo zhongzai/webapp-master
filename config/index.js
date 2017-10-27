@@ -29,7 +29,7 @@ module.exports = {
     assetsPublicPath: '/',
     proxyTable: {
         '/service': {
-        target: 'http://192.168.7.30:8080',
+        target: 'http://192.168.7.81:8081',
         changeOrigin: true ,
 
         onProxyReq:function(proxyReq, req, res)
