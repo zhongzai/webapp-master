@@ -287,7 +287,7 @@
     }
     .popup_sumbitBtn {
         position: absolute;
-        bottom: 5px;
+        bottom: 25px;
         width: 240px;
         right: 50%;
         left: 50%;
