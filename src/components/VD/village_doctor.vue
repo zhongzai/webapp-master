@@ -105,6 +105,7 @@
     import {Header} from 'mint-ui';
     import {Navbar, TabItem} from 'mint-ui';
     import {Popup} from 'mint-ui';
+    import { MessageBox } from 'mint-ui';
 
     export default {
         created() {
@@ -173,11 +174,36 @@
             },
             applySumbit:function () {
                 var me = this;
+                if(this.appointmentRole.identity==null || this.appointmentRole.identity == ''){
+                  MessageBox.alert('身份证号不能为空！!')
+                    return;
+                }
+              if(this.appointmentRole.phoneNumber==null || this.appointmentRole.phoneNumber == ''){
+                MessageBox.alert('手机号不能为空！')
+                return;
+              }
+              if(this.appointmentRole.qqMail==null || this.appointmentRole.qqMail == ''){
+                MessageBox.alert('邮箱不能为空！')
+                return;
+              }
+              if(this.appointmentRole.name == null || this.appointmentRole.name == ''){
+                MessageBox.alert('姓名不能为空！')
+                return;
+              }
+              if(this.appointmentRole.sex==null || this.appointmentRole.sex == ''){
+                MessageBox.alert('性别不能为空！')
+                return;
+              }
+              if(this.appointmentRole.age==null || this.appointmentRole.age == ''){
+                MessageBox.alert('年龄不能为空！')
+                return;
+              }
+
                 let data={
                     scheduleId:this.$localstore.get('scheduleId'),
                     createrId:this.$localstore.get('userId'),
                     idCard:this.appointmentRole.identity,
-                    sex:this.appointmentRole.selectSex,
+                    sex:this.appointmentRole.sex,
                     age:this.appointmentRole.age,
                     phone:this.appointmentRole.phoneNumber,
                     email:this.appointmentRole.qqMail,
